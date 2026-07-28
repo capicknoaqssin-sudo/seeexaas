@@ -1,13 +1,13 @@
-# 🚀 API de Processamento de Imagens para Roblox
+# 🚀 API de Extração Universal de Imagens para Roblox
 
-API Node.js que processa imagens de URLs e converte para o formato JSON usado no Roblox.
+API Node.js otimizada para extrair e converter imagens de **qualquer site** (Discord, Imgur, Tenor, Pinterest, Google, Base64, etc.) para o formato JSON do Roblox.
 
 ## 📋 Requisitos
 
 - Node.js 18+ instalado
 - npm ou yarn
 
-## 🚀 Instalação
+## 🚀 Instalação e Execução
 
 1. **Instale as dependências:**
 ```bash
@@ -21,21 +21,38 @@ node server.js
 
 A API estará rodando em `http://localhost:3000`
 
+---
+
 ## 📡 Endpoints
 
-### GET `/parse`
-Processa uma imagem de uma URL e retorna dados no formato JSON do Roblox.
+### 1. `GET /parse`
+Processa uma imagem de qualquer URL ou string Base64.
 
-**Parâmetros:**
-- `url` (obrigatório): URL da imagem a ser processada
-- `maxRes` (opcional): Resolução máxima (ex: 2048)
+**Parâmetros (Query):**
+- `url` (obrigatório): Link da imagem, link de página (ex: Imgur/Pinterest) ou string Base64.
+- `maxRes` (opcional): Resolução máxima por lado (Padrão: 800).
 
 **Exemplo:**
 ```
-GET http://localhost:3000/parse?url=https://exemplo.com/imagem.png&maxRes=2048
+GET http://localhost:3000/parse?url=https://cdn.discordapp.com/attachments/1234/5678/image.png
 ```
 
-**Resposta:**
+---
+
+### 2. `POST /parse`
+Ideal para enviar imagens em Base64 ou URLs longas sem limite de tamanho no cabeçalho.
+
+**Corpo (JSON):**
+```json
+{
+  "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+  "maxRes": 800
+}
+```
+
+---
+
+### Resposta Padrão da API:
 ```json
 {
   "Width": 128,
@@ -44,67 +61,16 @@ GET http://localhost:3000/parse?url=https://exemplo.com/imagem.png&maxRes=2048
     [255, 0, 0],
     [0, 255, 0],
     [0, 0, 255]
-    // ... mais pixels
   ]
 }
 ```
 
-### GET `/health`
-Verifica se a API está funcionando.
+---
 
-**Exemplo:**
-```
-GET http://localhost:3000/health
-```
+## 🛡️ Melhorias da Versão Universal
 
-**Resposta:**
-```json
-{
-  "status": "ok",
-  "message": "API está funcionando"
-}
-```
-
-## 💻 Como Usar
-
-### Via Navegador
-Abra o arquivo `Imagem para Roblox.html` no navegador e cole um link de imagem. A API será usada automaticamente.
-
-### Via cURL
-```bash
-curl "http://localhost:3000/parse?url=https://exemplo.com/imagem.png"
-```
-
-### Via JavaScript
-```javascript
-const response = await fetch('http://localhost:3000/parse?url=https://exemplo.com/imagem.png');
-const data = await response.json();
-console.log(data);
-```
-
-## 📦 Dependências
-
-- `express`: Framework web
-- `cors`: Middleware para CORS
-- `jimp`: Processamento de imagens
-
-## ⚙️ Configuração
-
-A porta padrão é `3000`. Para alterar, defina a variável de ambiente `PORT`:
-
-```bash
-PORT=8080 node server.js
-```
-
-## 🔧 Funcionalidades
-
-- ✅ Processa imagens de qualquer URL
-- ✅ Suporta múltiplos formatos (PNG, JPG, GIF, WebP, etc.)
-- ✅ Redimensionamento automático
-- ✅ Resolve problemas de CORS
-- ✅ Processamento rápido no servidor
-
-## 📄 Licença
-
-MIT
-
+- ✅ **Suporte Total ao Discord**: Trata links expirados, `cdn.discordapp.com`, `media.discordapp.net` e proxies de preview do Discord.
+- ✅ **Extração de Páginas Web (OpenGraph)**: Se você colar um link de página (ex: Imgur, Tenor, Pinterest), a API extrai automaticamente a imagem real (`og:image` / `twitter:image`).
+- ✅ **Bypass de Bloqueios (User-Agent Chrome)**: Envia cabeçalhos completos de navegador Chrome real para evitar erros HTTP 403 Forbidden ou bloqueios da Cloudflare.
+- ✅ **Suporte a Base64 e Data URLs**: Suporta URLs no formato `data:image/png;base64,...` ou Base64 pura.
+- ✅ **Tratamento de Redirecionamentos e Timeout**: Suporta múltiplos redirecionamentos HTTP(S) automáticos com limite de tempo de 15s para não travar.
