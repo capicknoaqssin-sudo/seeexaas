@@ -1,17 +1,21 @@
 {
   "name": "roblox-image-bot",
   "version": "1.0.0",
-  "description": "Bot Discord para converter imagens para formato JSON do Roblox",
-  "main": "bot.js",
+  "description": "Bot Discord e API Universal para converter imagens para formato JSON do Roblox",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node server.js"
   },
   "keywords": [
     "discord",
     "bot",
     "roblox",
     "image",
-    "converter"
+    "converter",
+    "avif",
+    "webp",
+    "sharp"
   ],
   "author": "",
   "license": "MIT",
@@ -20,6 +24,7 @@
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "express": "^5.1.0",
-    "jimp": "^0.22.12"
+    "jimp": "^0.22.12",
+    "sharp": "^0.33.5"
   }
 }
